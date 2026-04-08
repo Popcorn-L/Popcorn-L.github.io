@@ -1,11 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: libow
-  Date: 2026/4/8
-  Time: 15:18
-  To change this template use File | Settings | File Templates.
---%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="zh">
 <head>
@@ -18,10 +10,10 @@
       margin: 0;
       background: radial-gradient(circle at center, #3a2e2a, #1c1a1a);
       overflow: hidden;
-      font-family: "微软雅黑";
+      font-family: "微软雅黑", sans-serif;
     }
 
-    /* 礼盒（直接用图片） */
+    /* 礼盒 */
     .gift {
       position: absolute;
       top: 50%;
@@ -29,43 +21,25 @@
       transform: translate(-50%, -50%) scale(0.9);
       width: 280px;
       cursor: pointer;
-      transition: 1s;
+      transition: 1.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+      z-index: 10;
     }
 
     .gift img {
       width: 100%;
       border-radius: 20px;
-      box-shadow: 0 0 60px rgba(255,180,120,0.4);
-    }
-
-    /* 呼吸光 */
-    @keyframes glow {
-      0% { box-shadow: 0 0 30px rgba(255,180,120,0.3);}
-      100% { box-shadow: 0 0 80px rgba(255,200,150,0.8);}
-    }
-
-    .gift img {
+      box-shadow: 0 0 40px rgba(255,180,120,0.3);
       animation: glow 2s infinite alternate;
     }
 
-    /* 打开效果 */
-    .open {
-      transform: translate(-50%, -50%) scale(1.5);
-      opacity: 0;
+    @keyframes glow {
+      0% { box-shadow: 0 0 20px rgba(255,180,120,0.3);}
+      100% { box-shadow: 0 0 60px rgba(255,200,150,0.6);}
     }
 
-    /* 光爆发 */
-    .flash {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      background: radial-gradient(circle, rgba(255,220,180,0.9), transparent);
+    .gift.open {
+      transform: translate(-50%, -50%) scale(0) rotate(15deg);
       opacity: 0;
-      transition: 1s;
-    }
-
-    .flash.show {
-      opacity: 1;
     }
 
     /* 贺卡 */
@@ -73,14 +47,15 @@
       position: absolute;
       top: 50%;
       left: 50%;
-      transform: translate(-50%, -50%) translateY(80px) scale(0.6);
+      transform: translate(-50%, -50%) translateY(50px) scale(0.8);
       width: 85%;
-      max-width: 420px;
-      background: rgba(255,255,255,0.95);
-      padding: 30px;
-      border-radius: 20px;
+      max-width: 380px;
+      background: #fffdf9;
+      padding: 40px 30px;
+      border-radius: 24px;
       opacity: 0;
-      transition: 1s;
+      transition: 1.2s ease-out;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.5);
     }
 
     .card.show {
@@ -88,102 +63,47 @@
       opacity: 1;
     }
 
-    /* 标题 */
-    .title {
-      font-size: 24px;
-      color: #e67e22;
-      margin-bottom: 15px;
-    }
-
-    /* 内容 */
-    .text {
-      font-size: 17px;
-      line-height: 1.8;
-      color: #333;
-    }
-
-    /* 小字强调 */
-    .small {
-      font-size: 14px;
-      color: #e74c3c;
-      margin-top: 15px;
-      animation: shine 2s infinite alternate;
-    }
-
-    @keyframes shine {
-      from { text-shadow: 0 0 5px #ffb3a7;}
-      to { text-shadow: 0 0 15px #ff6b6b;}
-    }
-
-    /* 署名 */
-    .sign {
-      text-align: right;
-      margin-top: 20px;
-      font-size: 15px;
-      color: #666;
-      opacity: 0;
-      transition: 2s;
-    }
-
-    .sign.show {
-      opacity: 1;
-    }
-
-    /* 提示 */
-    .tip {
-      position: absolute;
-      bottom: 40px;
-      width: 100%;
-      text-align: center;
-      color: #aaa;
-    }
+    .title { font-size: 22px; color: #d35400; margin-bottom: 20px; font-weight: bold; }
+    .text { font-size: 16px; line-height: 1.8; color: #444; }
+    .small { font-size: 13px; color: #e74c3c; margin-top: 20px; font-weight: bold; }
+    .sign { text-align: right; margin-top: 25px; font-size: 14px; color: #888; opacity: 0; transition: 1s; }
+    .sign.show { opacity: 1; }
+    .tip { position: absolute; bottom: 40px; width: 100%; text-align: center; color: #8a7e7a; font-size: 14px; }
   </style>
 </head>
 
 <body>
 
-<!-- 光 -->
-<div class="flash" id="flash"></div>
-
-<!-- 礼盒 -->
-<div class="gift" onclick="openGift()">
-  <img src="images/cake.jpg">
+<div class="gift" id="giftBox" onclick="openGift()">
+  <img src="cake.jpg" alt="生日惊喜">
 </div>
 
-<div class="tip">✨ 点击打开生日惊喜 ✨</div>
+<div class="tip" id="tip">✨ 点击礼盒开启惊喜 ✨</div>
 
-<!-- 贺卡 -->
 <div class="card" id="card">
   <div class="title">🎂 爸爸~生日快乐！</div>
-
   <div class="text">
-    酒呢，小酌怡情，大饮伤身，在家记得照顾好自己和妈妈，注意身体！！！
+    酒呢，小酌怡情，大饮伤身，<br>
+    在家记得照顾好自己和妈妈，注意身体！！！
   </div>
-
   <div class="small">
     另：给你买的礼物已经在家等着你回家签收了哦~
   </div>
-
-  <div class="sign" id="sign">
-    在乎你们的女儿
-  </div>
+  <div class="sign" id="sign">—— 在乎你们的女儿</div>
 </div>
 
 <script>
   function openGift(){
-
-    document.querySelector(".gift").classList.add("open");
-
-    let flash = document.getElementById("flash");
-    flash.classList.add("show");
+    document.getElementById("giftBox").classList.add("open");
+    document.getElementById("tip").style.opacity = "0";
 
     setTimeout(()=>{
       document.getElementById("card").classList.add("show");
-    },600);
+    }, 600);
 
     setTimeout(()=>{
       document.getElementById("sign").classList.add("show");
-    },1600);
+    }, 1800);
   }
 </script>
 
