@@ -1,0 +1,191 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: libow
+  Date: 2026/4/8
+  Time: 15:18
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>生日快乐</title>
+
+  <style>
+    body {
+      margin: 0;
+      background: radial-gradient(circle at center, #3a2e2a, #1c1a1a);
+      overflow: hidden;
+      font-family: "微软雅黑";
+    }
+
+    /* 礼盒（直接用图片） */
+    .gift {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.9);
+      width: 280px;
+      cursor: pointer;
+      transition: 1s;
+    }
+
+    .gift img {
+      width: 100%;
+      border-radius: 20px;
+      box-shadow: 0 0 60px rgba(255,180,120,0.4);
+    }
+
+    /* 呼吸光 */
+    @keyframes glow {
+      0% { box-shadow: 0 0 30px rgba(255,180,120,0.3);}
+      100% { box-shadow: 0 0 80px rgba(255,200,150,0.8);}
+    }
+
+    .gift img {
+      animation: glow 2s infinite alternate;
+    }
+
+    /* 打开效果 */
+    .open {
+      transform: translate(-50%, -50%) scale(1.5);
+      opacity: 0;
+    }
+
+    /* 光爆发 */
+    .flash {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle, rgba(255,220,180,0.9), transparent);
+      opacity: 0;
+      transition: 1s;
+    }
+
+    .flash.show {
+      opacity: 1;
+    }
+
+    /* 贺卡 */
+    .card {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) translateY(80px) scale(0.6);
+      width: 85%;
+      max-width: 420px;
+      background: rgba(255,255,255,0.95);
+      padding: 30px;
+      border-radius: 20px;
+      opacity: 0;
+      transition: 1s;
+    }
+
+    .card.show {
+      transform: translate(-50%, -50%) translateY(0) scale(1);
+      opacity: 1;
+    }
+
+    /* 标题 */
+    .title {
+      font-size: 24px;
+      color: #e67e22;
+      margin-bottom: 15px;
+    }
+
+    /* 内容 */
+    .text {
+      font-size: 17px;
+      line-height: 1.8;
+      color: #333;
+    }
+
+    /* 小字强调 */
+    .small {
+      font-size: 14px;
+      color: #e74c3c;
+      margin-top: 15px;
+      animation: shine 2s infinite alternate;
+    }
+
+    @keyframes shine {
+      from { text-shadow: 0 0 5px #ffb3a7;}
+      to { text-shadow: 0 0 15px #ff6b6b;}
+    }
+
+    /* 署名 */
+    .sign {
+      text-align: right;
+      margin-top: 20px;
+      font-size: 15px;
+      color: #666;
+      opacity: 0;
+      transition: 2s;
+    }
+
+    .sign.show {
+      opacity: 1;
+    }
+
+    /* 提示 */
+    .tip {
+      position: absolute;
+      bottom: 40px;
+      width: 100%;
+      text-align: center;
+      color: #aaa;
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- 光 -->
+<div class="flash" id="flash"></div>
+
+<!-- 礼盒 -->
+<div class="gift" onclick="openGift()">
+  <img src="images/cake.png">
+</div>
+
+<div class="tip">✨ 点击打开生日惊喜 ✨</div>
+
+<!-- 贺卡 -->
+<div class="card" id="card">
+  <div class="title">🎂 爸爸~生日快乐！</div>
+
+  <div class="text">
+    酒呢，小酌怡情，大饮伤身，在家记得照顾好自己和妈妈，注意身体！！！
+  </div>
+
+  <div class="small">
+    另：给你买的礼物已经在家等着你回家签收了哦~
+  </div>
+
+  <div class="sign" id="sign">
+    在乎你们的女儿
+  </div>
+</div>
+
+<script>
+  function openGift(){
+
+    document.querySelector(".gift").classList.add("open");
+
+    let flash = document.getElementById("flash");
+    flash.classList.add("show");
+
+    setTimeout(()=>{
+      document.getElementById("card").classList.add("show");
+    },600);
+
+    setTimeout(()=>{
+      document.getElementById("sign").classList.add("show");
+    },1600);
+  }
+</script>
+
+</body>
+</html>
